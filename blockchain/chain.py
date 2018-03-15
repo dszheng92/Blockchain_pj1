@@ -131,4 +131,3 @@ class Blockchain(persistent.Persistent):
                 heaviest_weight = weight_in_block
 
         return heaviest_block
-
