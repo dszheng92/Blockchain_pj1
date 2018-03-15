@@ -1,4 +1,6 @@
 from matplotlib import pyplot as plt
+import math
+
 
 def calculate_profit(average_difficulty, hashrate_per_miner, num_miners, btc_usd_price, btc_per_block, months_to_mine):
     """ Calculate total net profit, in USD, for mining for a total duration of months_to_mine months.
@@ -14,9 +16,20 @@ def calculate_profit(average_difficulty, hashrate_per_miner, num_miners, btc_usd
         Returns:
             int: Total expected mining profit in USD, rounded down to the nearest integer.
     """
+   # references:
+    # https://bitcoin.stackexchange.com/questions/4565/calculating-average-number-of-hashes-tried-before-hitting-a-valid-block
+    # https://data.bitcoinity.org/bitcoin/difficulty/5y?t=l
+    # https://en.bitcoin.it/wiki/Difficulty
 
-    # Placeholder for (4)
-    return 50
+    try:
+        seconds_for_miner_to_find_block = average_difficulty * (2**32 / hashrate_per_miner)
+    except:
+        return 0
+    months_in_seconds = months_to_mine * 30 * 24 * 60 * 60
+    total_blocks_found = (months_in_seconds / seconds_for_miner_to_find_block) * num_miners
+    total_profit = math.floor(total_blocks_found * btc_per_block * btc_usd_price)
+    return total_profit
+
 
 
 if __name__ == "__main__":
