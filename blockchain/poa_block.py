@@ -47,9 +47,14 @@ class PoABlock(Block):
         # use self.get_private_key() for key
         # encode result as int and set using set_seal_data
         # make sure to check that output is valid seal with provided code
-
         # Placeholder for (2)
-        return
+        header = self.unsealed_header().encode("utf-8")
+        private_key = SigningKey.from_string(self.get_private_key(), curve=NIST192p)
+        public_key = VerifyingKey.from_string(self.get_public_key())
+        signature = private_key.sign(header)
+        num = int.from_bytes(signature, byteorder='big')
+        self.set_seal_data(num)
+
 
 
     def calculate_appropriate_target(self):
